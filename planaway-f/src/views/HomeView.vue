@@ -3,6 +3,7 @@ import { useRoute } from 'vue-router';
 import HomeViewSlika from '@/assets/images/HomeViewSlika.jpg';
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
+import { OhVueIcon, addIcons } from 'oh-vue-icons';
 
 const route = useRoute();
 const putovanja = ref([]);
@@ -43,7 +44,7 @@ onMounted(async () => {
         </div>
     </div>
 
-    <div class="p-4 m-3">
+    <div class="p-4 m-3 mt-8">
         <p class="text-xl font-semibold mb-4">Popularne destinacije</p>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
             <div 
@@ -57,6 +58,30 @@ onMounted(async () => {
                     <p class="text-gray-600">{{ putovanje.cijena }} €</p>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div class="p-4 m-3 grid grid-cols-1 md:grid-cols-3 gap-8 mt-10">
+        <div class="flex flex-col items-center text-center gap-2 p-5">
+            <RouterLink to="/trips">
+                <v-icon name="fc-search" scale="2.5" class="cursor-pointer" />
+            </RouterLink>
+            <p class="text-lg font-medium">Pretraživanje</p>
+            <p class="text-gray-600">Filtriraj i pronađi savršeno putovanje <br/> prema svojim željama</p>
+        </div>
+        <div class="flex flex-col items-center text-center gap-2 p-5">
+            <RouterLink to="/wishlist">
+                <v-icon name="fa-regular-heart" scale="2.5" class="cursor-pointer" />
+            </RouterLink>
+            <p class="text-lg font-medium">Wishlist</p>
+            <p class="text-gray-600">Spremi svoja omiljena putovanja za kasnije</p>
+        </div>
+        <div class="flex flex-col items-center text-center gap-2 p-5">
+            <RouterLink to="/todo">
+                <v-icon name="fc-todo-list" scale="2.5" class="cursor-pointer" />
+            </RouterLink>
+            <p class="text-lg font-medium">ToDo Lista</p>
+            <p class="text-gray-600">Organiziraj sve što trebaš za putovanje</p>
         </div>
     </div>
 </template>
