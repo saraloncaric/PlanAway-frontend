@@ -3,7 +3,6 @@ import { useRoute } from 'vue-router';
 import HomeViewSlika from '@/assets/images/HomeViewSlika.jpg';
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
-import { OhVueIcon, addIcons } from 'oh-vue-icons';
 
 const route = useRoute();
 const putovanja = ref([]);
