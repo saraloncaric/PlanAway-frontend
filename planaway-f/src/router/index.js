@@ -6,6 +6,9 @@ import ToDoView from "@/views/ToDoView.vue";
 import LoginView from "@/views/LoginView.vue";
 import RegistracijaView from "@/views/RegistracijaView.vue";
 import TripView from "@/views/TripView.vue";
+import AUpitiView from "@/views/AUpitiView.vue";
+import ProfilAgencijeView from "@/views/ProfilAgencijeView.vue";
+import AgencijaPutovanjaView from "@/views/AgencijaPutovanjaView.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -31,7 +34,7 @@ const router = createRouter({
             component: TripsView
         },
         {
-            path: '/trips/:naslov',
+            path: '/trips/:id',
             name: 'trip',
             component: TripView
         },
@@ -44,6 +47,21 @@ const router = createRouter({
             path: '/todo',
             name: 'todo',
             component: ToDoView
+        },
+        {
+            path: '/upiti',
+            name: 'upiti',
+            component: AUpitiView
+        },
+        {
+            path: '/profil',
+            name: 'profil',
+            component: ProfilAgencijeView
+        },
+        {
+            path: '/agencijap',
+            name: 'Aputovanja',
+            component: AgencijaPutovanjaView
         }
     ]
 })
