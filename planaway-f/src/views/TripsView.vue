@@ -1,16 +1,31 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
+import { useRouter } from 'vue-router';
 import axios from 'axios';
 
+const router = useRouter();
 const putovanja = ref([]);
 const trenutniPage = ref(1);    
 const putovanjaPoStr = 16;
 const trazilica = ref('');
+const whislistId = ref([]);
+const error = ref('');
 
 onMounted(async () => {
     try {
         const res = await axios.get('/api/putovanja');
-        putovanja.value = [ ...res.data].sort(() => Math.random() - 0.5)
+        putovanja.value = [ ...res.data].sort(() => Math.random() - 0.5);
+        const token = localStorage.getItem('token');
+        if (token) {
+            try {
+                const wishlist_Response = await axios.get('/api/wishlist/korisnik', {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                whislistId.value = wishlist_Response.data.map(w => w.putovanje_id);
+            } catch(err) {
+                console.error('Greška kod dodavanja na wishlistu:', err);
+            }
+        }
     } catch(error) {
         console.error('Greška pri dohvaćanju putovanja:', error)
    }
@@ -40,6 +55,25 @@ const goToPage = (stranica) => {
 function resetPage() {
     trenutniPage.value = 1;
 }
+const dodajNaWishlistu = async(putovanje_id) => {
+    try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            router.push('/login');
+            return;
+        }
+        if (whislistId.value.includes(putovanje_id)) {
+            return;
+        }
+        await axios.post('/api/wishlist', 
+            { putovanje_id },
+            { headers: { Authorization: `Bearer ${token}`}}
+    )
+    } catch(err) {
+        error.value = 'Greška kod dodavanja na wishlistu';
+        console.error(err);
+    }
+}
 </script>
 <template>
     <div class="p-4 m-5">
@@ -59,8 +93,30 @@ function resetPage() {
                 <img :src="putovanje.image" :alt="putovanje.naslov" class="w-full h-48 object-cover" />
 
                 <div class="p-4">
-                    <h2 class="text-lg font-semibold">{{ putovanje.naslov }}</h2>
-                    <p class="text-gray-600">{{ putovanje.cijena }} €</p>
+                    <div class="flex items-start justify-between mb-1">
+                            <h2 class="text-lg font-semibold">
+                                {{ putovanje.destinacija }}, {{ putovanje.drzava }}
+                            </h2>
+                            <button @click="dodajNaWishlistu(putovanje.putovanje_id)"
+                                class="transition ml-2 cursor-pointer text-xl">
+                                ❤️
+                            </button>
+                        </div>
+                        <p class="text-gray-500 text-sm mb-3">
+                            {{ putovanje.broj_dana }} dana/{{ putovanje.broj_noci }}noći
+                        </p>
+                        <p class="text-gray-600 text-sm mb-4 line-clamp-2">
+                            {{ putovanje.opis }}
+                        </p>
+                        <div class="flex items-center justify-between">
+                            <span class="bg-green-100 text-green-800 text-sm font-medium px-4 py-2 rounded-lg">
+                                {{ putovanje.cijena }}€
+                            </span>
+                            <RouterLink :to="`/trips/${putovanje.putovanje_id}`"
+                                class="bg-blue-100 hover:bg-blue-200 text-gray-800 text-sm font-medium px-4 py-2 rounded-lg transition">
+                                Detalji
+                            </RouterLink>
+                        </div>
                 </div>
             </div>
         </div>

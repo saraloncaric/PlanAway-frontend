@@ -15,8 +15,8 @@ const login = async() => {
         localStorage.setItem('token', response.data.jwt_token);        
         window.dispatchEvent(new Event('login'));
         router.push('/');
-    } catch(error) {
-        error.value = error.response?.data?.poruka || 'Greška pri prijavi'; 
+    } catch(err) {
+        error.value = err.response?.data?.poruka || 'Greška pri prijavi'; 
     }
 }
 </script>
@@ -27,11 +27,11 @@ const login = async() => {
                 <h1 class="text-3xl font-bold text-gray-800 mb-2">Dobrodošli natrag</h1>
                 <p class="text-gray-600">Prijavite se na svoj račun</p>
             </div>
-            <button 
+            <!-- <button 
                 @click=""
                 class="w-full flex items-center justify-center gap-3 bg-white border-2 border-gray-300 rounded-lg px-6 py-3 text-gray-700 font-medium hover:bg-gray-50 hover:border-gray-400 transition mb-6">
                 Nastavi s Google računom
-            </button>
+            </button>  -->
             <div class="flex items-center gap-4 mb-6">
                 <div class="flex-1 h-px bg-gray-300"></div>
                 <span class="text-sm text-gray-500">ili</span>
