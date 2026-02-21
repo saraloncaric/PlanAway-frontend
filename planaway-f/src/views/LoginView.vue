@@ -37,9 +37,6 @@ const login = async() => {
                 <span class="text-sm text-gray-500">ili</span>
                 <div class="flex-1 h-px bg-gray-300"></div>
             </div>
-            <div v-if="error" class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4">
-                {{ error }}
-            </div>  
             <form @submit.prevent="login" class="space-y-4">
                 <div>
                     <label for="email" class="block text-sm font-medium text-gray-700 mb-2">

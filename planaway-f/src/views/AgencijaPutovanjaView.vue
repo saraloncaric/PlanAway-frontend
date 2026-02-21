@@ -25,8 +25,7 @@ const dohvatiSvaPutovanja = async() => {
         const response = await axios.get(`/api/agencije/${agencija.agencija_id}/putovanja`);  
         putovanja.value = response.data;
     } catch(err) {
-        error.value = 'Greška pri dohvaćanju putovanja';
-        console.error(err);
+        console.error('Greška pri dohvaćanju putovanja', err);
     }
 }
 const obrisiPutovanje = async(putovanje_id) => {
@@ -37,8 +36,7 @@ const obrisiPutovanje = async(putovanje_id) => {
         })
         putovanja.value = putovanja.value.filter(p => p.putovanje_id !== putovanje_id);
     } catch(err) {
-        error.value = 'Greška pri brisanju';
-        console.error(err);
+        console.error('Greška pri brisanju', err);
     }
 }
 onMounted(() => {
@@ -47,9 +45,6 @@ onMounted(() => {
 </script>
 <template>
     <div class="min-h-screen bg-gray-50 pb-10">
-        <div v-if="error" class="m-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg">
-            {{ error }}
-        </div>
         <div class="mx-6 mt-6">
             <div v-if="putovanja.length === 0" class="text-center py-20">
                 <p class="text-gray-500 text-lg">Nemate putovanja</p>

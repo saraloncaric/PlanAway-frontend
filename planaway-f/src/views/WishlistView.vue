@@ -3,7 +3,6 @@ import axios from 'axios';
 import { onMounted, ref } from 'vue';
 
 const wishlist = ref([]);
-const error = ref('');
 
 const dohvatiWishlistu = async() => {
     try {
@@ -13,8 +12,7 @@ const dohvatiWishlistu = async() => {
         })
         wishlist.value = response.data;
     } catch(err) {
-        error.value = 'Greška pri dohvaćanju wishliste';
-        console.error(err)
+        console.error('Greška pri dohvaćanju wishliste', err)
     }
 }
 const ukloniIzWishliste = async(wishlist_id) => {
@@ -36,9 +34,6 @@ onMounted(() => {
     <div class="min-h-screen bg-gray-50 pb-10">
         <div class="m-6">
             <h1 class="text-3xl font-semibold mb-2">Moja wishlista</h1>
-        </div>
-        <div v-if="error" class="m-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg">
-            {{ error }}
         </div>
         <div v-if="wishlist.length > 0" class="mx-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div v-for="item in wishlist" :key="item.wishlist_id" 

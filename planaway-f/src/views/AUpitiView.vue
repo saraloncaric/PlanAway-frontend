@@ -3,7 +3,6 @@ import axios from 'axios';
 import { onMounted, ref } from 'vue';
 
 const upiti = ref([]);
-const error = ref('');
 
 const dohvatiUpite = async() => {
     try {
@@ -13,8 +12,7 @@ const dohvatiUpite = async() => {
         })
         upiti.value = response.data;
     } catch(err) {
-        error.value = 'Greška pri dohvaćanju upita';
-        console.error(err);
+        console.error('Greška pri dohvaćanju upita', err);
     }
 }
 const promjeniStatus = async(upit_id, noviStatus) => {
@@ -52,9 +50,6 @@ onMounted(() => {
 </script>
 <template>
     <div class="min-h-screen bg-gray-50 pb-10">
-        <div v-if="error" class="m-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg">
-            {{ error }}
-        </div>
         <div class="mx-6 mt-6 bg-white rounded-lg shadow overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="w-full">

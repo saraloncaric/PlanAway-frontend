@@ -55,6 +55,11 @@ const router = createRouter({
         },
         {
             path: '/profil',
+            name: 'profil-agencija',
+            component: ProfilAgencijeView
+        },
+        {
+            path: '/profil/:id',
             name: 'profil',
             component: ProfilAgencijeView
         },

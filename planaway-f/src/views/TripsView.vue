@@ -9,7 +9,6 @@ const trenutniPage = ref(1);
 const putovanjaPoStr = 16;
 const trazilica = ref('');
 const whislistId = ref([]);
-const error = ref('');
 
 onMounted(async () => {
     try {
@@ -70,8 +69,7 @@ const dodajNaWishlistu = async(putovanje_id) => {
             { headers: { Authorization: `Bearer ${token}`}}
     )
     } catch(err) {
-        error.value = 'Greška kod dodavanja na wishlistu';
-        console.error(err);
+        console.error('Greška kod dodavanja na wishlistu', err);
     }
 }
 </script>

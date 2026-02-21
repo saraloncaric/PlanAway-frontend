@@ -14,8 +14,7 @@ const dohvatiZadatke = async() => {
         })
         zadaci.value = response.data;
     } catch(err) {
-        error.value = 'Greška pri dohvaćanju zadataka';
-        console.error(err);
+        console.error('Greška pri dohvaćanju zadataka', err);
     }
 }
 const poKategorijama = computed(() => {
@@ -80,10 +79,6 @@ onMounted(() => {
         <div class="m-6 p-2">
             <h1 class="font-semibold text-2xl">To-Do Liste</h1>
             <p class="mt-2">Organiziraj sve za svoje putovanje</p>
-        </div>
-
-        <div v-if="error" class="m-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg">
-            {{ error }}
         </div>
 
         <div class="mx-6 space-y-6 pb-10">
