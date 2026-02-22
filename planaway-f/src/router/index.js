@@ -9,6 +9,7 @@ import TripView from "@/views/TripView.vue";
 import AUpitiView from "@/views/AUpitiView.vue";
 import ProfilAgencijeView from "@/views/ProfilAgencijeView.vue";
 import AgencijaPutovanjaView from "@/views/AgencijaPutovanjaView.vue";
+import NovoPutovanjeView from "@/views/NovoPutovanjeView.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -67,6 +68,11 @@ const router = createRouter({
             path: '/agencijap',
             name: 'Aputovanja',
             component: AgencijaPutovanjaView
+        },
+        {
+            path: '/novoputovanje',
+            name: 'novoputovanje',
+            component: NovoPutovanjeView
         }
     ]
 })

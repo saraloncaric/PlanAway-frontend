@@ -9,6 +9,9 @@ const putovanje = ref(null);
 const agencija = ref(null);
 const uređivanje = ref(false);
 const spremanje = ref(false);
+const brojOsoba = ref(1);
+const slanjeUpita = ref(false);
+const upit = ref('');
 
 const jeAgencija = ref(false);
 
@@ -37,17 +40,17 @@ const provjeraAgencije = async() => {
         return false;
     }
     const user_response = await axios.get('/api/users/ime', {
-        Headers: { Authorization : `Bearer ${token}` }
+        headers: { Authorization : `Bearer ${token}` }
     });
-    return user_response.user_type === 'agencija' && 
+    return user_response.data.user_type === 'agencija' && 
         putovanje.value.agencija_id === agencija.value.agencija_id &&
         agencija.value.user_id === user_response.data.user_id;
 }
 const dohvatiPutovanje = async() => {
     try {
         const putovanje_id = route.params.id;
-        const response = await axios.get(`/api/agencije/${putovanje_id}`);
-        agencija.value = response.data;
+        const response = await axios.get(`/api/putovanja/${putovanje_id}`);
+        putovanje.value = response.data;
 
         const agencija_response = await axios.get(`/api/agencije/${putovanje.value.agencija_id}`);
         agencija.value = agencija_response.data;
@@ -81,9 +84,10 @@ const promjene = async() => {
     spremanje.value = true;
     try {
         const token = localStorage.getItem('token');
-        const response = await axios.put(`/api/putovanja/${putovanje.value.putovanje_id}`, {
-            headers: { Authorization: `Bearer ${token}`}
-        })
+        const response = await axios.put(`/api/putovanja/${putovanje.value.putovanje_id}`, 
+            forma.value,
+            { headers: { Authorization: `Bearer ${token}`}}
+        )
         putovanje.value = response.data.putovanje;
         uređivanje.value = false;
     } catch(err) {
@@ -114,11 +118,11 @@ const otkaziPromjene = () => {
     }
     uređivanje.value = false;
 }
-const parseArray = (arr) => {
-    if (Array.isArray(arr)) return arr;
-    if (!arr) return [];
-    if (typeof arr === 'string') {
-        return arr.replace(/[{}]/g, '').split(',').map(s => s.trim().replace(/"/g, ''));
+const parseArray = (array) => {
+    if (Array.isArray(arr)) return array;
+    if (!array) return [];
+    if (typeof array === 'string') {
+        return array.replace(/[{}]/g, '').split(',').map(s => s.trim().replace(/"/g, ''));
     }
     return [];
 }
@@ -126,15 +130,39 @@ const formatDatum = (datum) => {
     if (!datum) return '';
     return new Date(datum).toLocaleDateString('hr-HR');
 };
+const posaljiUpit = async() => {
+    const token = localStorage.getItem('token');
+    if(!token) {
+        router.push('/login');
+        return;
+    }
+    slanjeUpita.value = true;
+    upit.value = '';
+    try {
+        await axios.post('/api/upiti', 
+        {
+            putovanje_id: putovanje.value.putovanje_id,
+            broj_ljudi: brojOsoba.value
+        }, {
+            headers: { Authorization: `Bearer ${token}`}
+        })
+        upit.value = 'Upit uspješno poslan!'
+    } catch(err) {
+        console.error('Greška pri slanju upita', err);
+    } finally {
+        slanjeUpita.value = false;
+
+    }
+}
 onMounted(() => {
     dohvatiPutovanje();
 })
 </script>
 <template>
-    <div class="min-h-screen bg-gray-50 pt-16 pb-10">
+    <div class="min-h-screen bg-gray-50 pt-3 pb-10">
         <div v-if="putovanje" class="max-w-6xl mx-auto px-6">
             <button @click="router.back()" class="mb-4 text-blue-600 hover:text-blue-800 glex items-center gap-2">
-                <- Natrag
+                Natrag
             </button>
             <div class="mb-6">
                 <img v-if="!uređivanje" :src="putovanje.image" :alt="putovanje.naslov" 
@@ -265,7 +293,9 @@ onMounted(() => {
                                 </span>
                             </div>
                             <div>
-                                <h3 class="font-bold text-lg">{{ agencija.naziv_agencije }}</h3>
+                                <RouterLink :to="`/profil/${agencija.agencija_id}`">
+                                    <h3 class="font-bold text-lg">{{ agencija.naziv_agencije }}</h3>
+                                </RouterLink>
                                 <p class="text-sm text-gray-600">{{ agencija.kontakt_email }}</p>
                                 <p class="text-sm text-gray-600">{{ agencija.kontakt_broj }}</p>
                             </div>
@@ -273,7 +303,7 @@ onMounted(() => {
                     </div>
                 </div>
                 <div class="space-y-6">
-                    <div v-if="!jeAgencija" class="bg-white rounded-2xl shadow-sm p-6 sticky top-20">
+                    <div v-if="!jeAgencija" class="bg-white rounded-2xl shadow-sm p-6 top-20">
                         <h3 class="text-xl font-bold text-gray-800 mb-4">Pošalji upit</h3>
                         <div class="space-y-4">
                             <div>
@@ -284,16 +314,20 @@ onMounted(() => {
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Broj osoba</label>
-                                <select class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                                <select v-model="brojOsoba" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
                                     <option value="1">1</option>
                                     <option value="2">2</option>
                                     <option value="3">3</option>
                                     <option value="4">4+</option>
                                 </select>
                             </div>
-                            <button class="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-3 rounded-lg transition">
+                            <button @click="posaljiUpit" :disabled="slanjeUpita" class="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-3 rounded-lg transition">
                                 Pošalji upit
                             </button>
+                            <div v-if="upit" class="p-3 rounded-lg text-sm text-center" 
+                                :class="upit.includes('uspješno') ? 'bg-green-50 text-green-700 border border-green-200' : 'bg-red-50 text-red-700 border border-red-200'">
+                                {{ upit }}
+                            </div>
                             <p class="text-xs text-center text-gray-500">
                                 Besplatno otkazivanje do 14 dana prije polaska
                             </p>

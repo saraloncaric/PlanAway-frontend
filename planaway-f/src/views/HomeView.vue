@@ -53,8 +53,26 @@ onMounted(async () => {
                 <img :src="putovanje.image" :alt="putovanje.naslov" class="w-full h-48 object-cover" />
 
                 <div class="p-4">
-                    <h2 class="text-lg font-semibold">{{ putovanje.naslov }}</h2>
-                    <p class="text-gray-600">{{ putovanje.cijena }} €</p>
+                    <div class="flex items-start justify-between mb-1">
+                        <h2 class="text-lg font-semibold">
+                            {{ putovanje.destinacija }}, {{ putovanje.drzava }}
+                        </h2>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-3">
+                        {{ putovanje.broj_dana }} dana/{{ putovanje.broj_noci }}noći
+                    </p>
+                    <p class="text-gray-600 text-sm mb-4 line-clamp-2">
+                        {{ putovanje.opis }}
+                    </p>
+                    <div class="flex items-center justify-between">
+                        <span class="bg-green-100 text-green-800 text-sm font-medium px-4 py-2 rounded-lg">
+                            {{ putovanje.cijena }}€
+                        </span>
+                        <RouterLink :to="`/trips/${putovanje.putovanje_id}`"
+                            class="bg-blue-100 hover:bg-blue-200 text-gray-800 text-sm font-medium px-4 py-2 rounded-lg transition">
+                            Detalji
+                        </RouterLink>
+                    </div>
                 </div>
             </div>
         </div>

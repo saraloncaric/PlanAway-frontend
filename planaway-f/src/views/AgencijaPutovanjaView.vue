@@ -46,6 +46,22 @@ onMounted(() => {
 <template>
     <div class="min-h-screen bg-gray-50 pb-10">
         <div class="mx-6 mt-6">
+            <div class="flex justify-between items-center mb-6">
+                <h1 class="text-2xl font-bold text-gray-800">Moja putovanja</h1>
+                <RouterLink 
+                    to="/novoputovanje"
+                    class="bg-green-500 hover:bg-green-600 text-white font-semibold px-6 py-3 rounded-lg transition flex items-center gap-2">
+                    + Dodaj putovanje
+                </RouterLink>
+            </div>
+            <div v-if="!putovanja || putovanja.length === 0" class="text-center py-20">
+                <p class="text-gray-500 mb-4">Nemate dodanih putovanja</p>
+                <RouterLink 
+                    to="/novoputovanje"
+                    class="inline-block bg-blue-500 hover:bg-blue-600 text-white font-medium px-6 py-3 rounded-lg transition">
+                    Dodaj prvo putovanje
+                </RouterLink>
+            </div>
             <div v-if="putovanja.length === 0" class="text-center py-20">
                 <p class="text-gray-500 text-lg">Nemate putovanja</p>
             </div>
