@@ -38,11 +38,6 @@ const registracija = async () => {
                 <h1 class="text-3xl font-bold text-gray-800 mb-2">Kreirajte račun</h1>
                 <p class="text-gray-600">Ispunite podatke za registraciju</p>
             </div>
-            <!-- <button 
-                @click=""
-                class="w-full flex items-center justify-center gap-3 bg-white border-2 border-gray-300 rounded-lg px-6 py-3 text-gray-700 font-medium hover:bg-gray-50 hover:border-gray-400 transition mb-6">
-                Registriraj se s Google računom
-            </button> -->
             <div class="flex items-center gap-4 mb-6">
                 <div class="flex-1 h-px bg-gray-300"></div>
                 <span class="text-sm text-gray-500">ili</span>
