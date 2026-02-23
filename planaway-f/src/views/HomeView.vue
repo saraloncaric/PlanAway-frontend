@@ -10,7 +10,7 @@ const randomPutovanja = ref([]);
 
 onMounted(async () => {
     try {
-        const res = await axios.get(import.meta.env.VITE_API_URL + '/api/putovanja');
+        const res = await axios.get(import.meta.env.VITE_API_URL + 'api/putovanja');
         putovanja.value = res.data;
         randomPutovanja.value = [ ...putovanja.value]
             .sort(() => Math.random() - 0.5)

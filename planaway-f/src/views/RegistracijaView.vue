@@ -22,7 +22,7 @@ const registracija = async () => {
         return;
     }
     try {
-        const response = await axios.post(import.meta.env.VITE_API_URL + '/api/users/registracija', 
+        const response = await axios.post(import.meta.env.VITE_API_URL + 'api/users/registracija', 
             { ime: ime.value, prezime: prezime.value, email: email.value, password: password.value });
         localStorage.setItem('token', response.data.jwt_token);
         router.push('/')

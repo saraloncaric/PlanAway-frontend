@@ -10,11 +10,11 @@ const error = ref('');
 const dohvatiSvaPutovanja = async() => {
     try {
         const token = localStorage.getItem('token');
-        const userResponse = await axios.get(import.meta.env.VITE_API_URL + '/api/users/ime', {
+        const userResponse = await axios.get(import.meta.env.VITE_API_URL + 'api/users/ime', {
             headers: { Authorization: `Bearer ${token}`}
         })
         const user_id = userResponse.data.user_id;
-        const agencijaResponse = await axios.get(import.meta.env.VITE_API_URL + '/api/agencije', {
+        const agencijaResponse = await axios.get(import.meta.env.VITE_API_URL + 'api/agencije', {
             headers: { Authorization: `Bearer ${token}`}
         })
         const agencija = agencijaResponse.data.find(a => a.user_id === user_id);
@@ -22,7 +22,7 @@ const dohvatiSvaPutovanja = async() => {
             error.value = 'Agencija nije pronađena';
             return;
         }
-        const response = await axios.get(import.meta.env.VITE_API_URL +  `/api/agencije/${agencija.agencija_id}/putovanja`);  
+        const response = await axios.get(import.meta.env.VITE_API_URL +  `api/agencije/${agencija.agencija_id}/putovanja`);  
         putovanja.value = response.data;
     } catch(err) {
         console.error('Greška pri dohvaćanju putovanja', err);
@@ -31,7 +31,7 @@ const dohvatiSvaPutovanja = async() => {
 const obrisiPutovanje = async(putovanje_id) => {
     try {
         const token = localStorage.getItem('token');
-        await axios.delete(import.meta.env.VITE_API_URL + `/api/putovanja/${putovanje_id}`, {
+        await axios.delete(import.meta.env.VITE_API_URL + `api/putovanja/${putovanje_id}`, {
             headers: { Authorization: `Bearer ${token}`}
         })
         putovanja.value = putovanja.value.filter(p => p.putovanje_id !== putovanje_id);

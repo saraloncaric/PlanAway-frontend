@@ -29,10 +29,10 @@ const dodajPutovanje = async() => {
     spremanje.value = true;
     try {
         const token = localStorage.getItem('token');
-        const user_response = await axios.get(import.meta.env.VITE_API_URL + '/api/users/ime', {
+        const user_response = await axios.get(import.meta.env.VITE_API_URL + 'api/users/ime', {
             headers: {Authorization: `Bearer ${token}` }
         })
-        const agencija_response = await axios.get(import.meta.env.VITE_API_URL + '/api/agencije');
+        const agencija_response = await axios.get(import.meta.env.VITE_API_URL + 'api/agencije');
         const agencija = agencija_response.data.find(a => a.user_id === user_response.data.user_id);
         if(!agencija) {
             console.error('Agencija nije pronađena', err);
@@ -58,7 +58,7 @@ const dodajPutovanje = async() => {
             nije_ukljuceno: forma.value.nije_ukljuceno ? forma.value.nije_ukljuceno.split(',').map(s => s.trim()) : [],
             vazne_informacije: forma.value.vazne_informacije
         }
-        await axios.post(import.meta.env.VITE_API_URL + `/api/putovanja`, 
+        await axios.post(import.meta.env.VITE_API_URL + `api/putovanja`, 
             podaci,
             { headers: { Authorization: `Bearer ${token}` }}
         )
