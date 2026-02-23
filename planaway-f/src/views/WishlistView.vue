@@ -8,7 +8,7 @@ const upiti = ref([]);
 const dohvatiWishlistu = async() => {
     try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('/api/wishlist/korisnik', {
+        const response = await axios.get(import.meta.env.VITE_API_URL + '/api/wishlist/korisnik', {
             headers: { Authorization: `Bearer ${token}`}
         })
         wishlist.value = response.data;
@@ -19,7 +19,7 @@ const dohvatiWishlistu = async() => {
 const ukloniIzWishliste = async(wishlist_id) => {
     try {
         const token = localStorage.getItem('token');
-        const response = await axios.delete(`/api/wishlist/${wishlist_id}`, {
+        const response = await axios.delete(import.meta.env.VITE_API_URL + `/api/wishlist/${wishlist_id}`, {
             headers: { Authorization: `Bearer ${token}`}
         })
         wishlist.value = wishlist.value.filter(w => w.wishlist_id !== wishlist_id); 
@@ -30,7 +30,7 @@ const ukloniIzWishliste = async(wishlist_id) => {
 const dohvatiUpite = async() => {
     try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('/api/upiti/moji-upiti', {
+        const response = await axios.get(import.meta.env.VITE_API_URL + '/api/upiti/moji-upiti', {
             headers: { Authorization: `Bearer ${token}`}
         })
         upiti.value = response.data;

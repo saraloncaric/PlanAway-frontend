@@ -12,12 +12,12 @@ const whislistId = ref([]);
 
 onMounted(async () => {
     try {
-        const res = await axios.get('/api/putovanja');
+        const res = await axios.get(import.meta.env.VITE_API_URL + '/api/putovanja');
         putovanja.value = [ ...res.data].sort(() => Math.random() - 0.5);
         const token = localStorage.getItem('token');
         if (token) {
             try {
-                const wishlist_Response = await axios.get('/api/wishlist/korisnik', {
+                const wishlist_Response = await axios.get(import.meta.env.VITE_API_URL + '/api/wishlist/korisnik', {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 whislistId.value = wishlist_Response.data.map(w => w.putovanje_id);
@@ -64,7 +64,7 @@ const dodajNaWishlistu = async(putovanje_id) => {
         if (whislistId.value.includes(putovanje_id)) {
             return;
         }
-        await axios.post('/api/wishlist', 
+        await axios.post(import.meta.env.VITE_API_URL + '/api/wishlist', 
             { putovanje_id },
             { headers: { Authorization: `Bearer ${token}`}}
     )

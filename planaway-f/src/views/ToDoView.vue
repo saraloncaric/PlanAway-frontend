@@ -9,7 +9,7 @@ const dohvatiZadatke = async() => {
     error.value = '';
     try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('/api/todo/liste', {
+        const response = await axios.get(import.meta.env.VITE_API_URL + '/api/todo/liste', {
             headers: { Authorization: `Bearer ${token}`}
         })
         zadaci.value = response.data;
@@ -37,7 +37,7 @@ const dodajNoviZadatak = async(kategorija) => {
     if(!kategorija.noviZadatak.trim()) return ;
     try {
         const token = localStorage.getItem('token');
-        const response = await axios.post('/api/todo', 
+        const response = await axios.post(import.meta.env.VITE_API_URL + '/api/todo', 
             { tekst: kategorija.noviZadatak, kategorija: kategorija.naslov },
             { headers: { Authorization: `Bearer ${token}` }}
         );
@@ -51,7 +51,7 @@ const zavrsenZadatak = async (zadatak) => {
     error.value = '';
     try {
         const token = localStorage.getItem('token');
-        await axios.put(`/api/todo/${zadatak.zadatak_id}`, 
+        await axios.put(import.meta.env.VITE_API_URL + `/api/todo/${zadatak.zadatak_id}`, 
             { zavrsen: !zadatak.zavrsen },
             { headers: { Authorization: `Bearer ${token}` }}
         )
@@ -63,7 +63,7 @@ const obrisiZadatak = async(zadatakId) => {
     error.value = '';
     try {
         const token = localStorage.getItem('token');
-        await axios.delete(`/api/todo/${zadatakId}`, 
+        await axios.delete(import.meta.env.VITE_API_URL + `/api/todo/${zadatakId}`, 
             { headers: { Authorization: `Bearer ${token}` } });
         zadaci.value = zadaci.value.filter(z => z.zadatak_id !== zadatakId)
     } catch(err) {

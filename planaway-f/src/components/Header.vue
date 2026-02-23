@@ -16,7 +16,7 @@ const checkAuth = async () => {
         return;
     }
     try {
-        const response = await axios.get('/api/users/ime', {
+        const response = await axios.get(import.meta.env.VITE_API_URL + '/api/users/ime', {
             headers: { Authorization: `Bearer ${token}` }
         });
         user.value = response.data;

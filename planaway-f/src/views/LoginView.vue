@@ -11,7 +11,8 @@ const error = ref('');
 const login = async() => {
     error.value = '';
     try {
-        const response = await axios.post('/api/users/login', { email: email.value, password: password.value });        
+        const response = await axios.post(import.meta.env.VITE_API_URL + '/api/users/login', 
+            { email: email.value, password: password.value });        
         localStorage.setItem('token', response.data.jwt_token);        
         window.dispatchEvent(new Event('login'));
         router.push('/');

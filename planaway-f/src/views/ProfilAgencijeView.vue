@@ -22,21 +22,21 @@ const dohvatiAgenciju = async () => {
         const token = localStorage.getItem('token');
         let agencija_id = route.params.id;
         if(!agencija_id && token) {
-            const user_response = await axios.get('/api/users/ime', {
+            const user_response = await axios.get(import.meta.env.VITE_API_URL + '/api/users/ime', {
                 headers: { Authorization: `Bearer ${token}`}
             })
-            const agencijeRes = await axios.get('/api/agencije');
+            const agencijeRes = await axios.get(import.meta.env.VITE_API_URL + '/api/agencije');
             const mojaAgencija = agencijeRes.data.find(a => a.user_id === user_response.data.user_id);
             if (mojaAgencija) {
                 agencija_id = mojaAgencija.agencija_id;
                 postoji.value = true;
             }
         }
-        const response = await axios.get(`/api/agencije/${agencija_id}`);
+        const response = await axios.get(import.meta.env.VITE_API_URL + `/api/agencije/${agencija_id}`);
         agencija.value = response.data;
         
         if (token && !postoji.value) {
-            const user_response = await axios.get('/api/users/ime', {
+            const user_response = await axios.get(import.meta.env.VITE_API_URL + '/api/users/ime', {
                 headers: { Authorization: `Bearer ${token}`}
             });
             postoji.value = user_response.data.user_type === 'agencija' && 
@@ -56,7 +56,7 @@ const promjene = async() => {
     spremi.value = true;
     try {
         const token = localStorage.getItem('token');
-        const response = await axios.put(`/api/agencije/${agencija.value.agencija_id}`, 
+        const response = await axios.put(import.meta.env.VITE_API_URL + `/api/agencije/${agencija.value.agencija_id}`, 
             forma.value,
             { headers: { Authorization: `Bearer ${token}`}}
         )

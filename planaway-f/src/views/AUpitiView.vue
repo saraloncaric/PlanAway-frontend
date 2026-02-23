@@ -7,7 +7,7 @@ const upiti = ref([]);
 const dohvatiUpite = async() => {
     try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('/api/upiti/agencija', {
+        const response = await axios.get(import.meta.env.VITE_API_URL + '/api/upiti/agencija', {
             headers: { Authorization: `Bearer ${token}`}
         })
         upiti.value = response.data;
@@ -18,7 +18,7 @@ const dohvatiUpite = async() => {
 const promjeniStatus = async(upit_id, noviStatus) => {
     try {
         const token = localStorage.getItem('token');
-        await axios.put(`/api/upiti/${upit_id}`, 
+        await axios.put(import.meta.env.VITE_API_URL + `/api/upiti/${upit_id}`, 
             { status: noviStatus },
             { headers: { Authorization: `Bearer ${token}` }}
         );
@@ -33,7 +33,7 @@ const promjeniStatus = async(upit_id, noviStatus) => {
 const obrisiUpit = async(upit_id) => {
     try {
         const token = localStorage.getItem('token');
-        await axios.delete(`/api/upiti/${upit_id}`, {
+        await axios.delete(import.meta.env.VITE_API_URL + `/api/upiti/${upit_id}`, {
             headers: { Authorization: `Bearer ${token}`}
         })
         upiti.value = upiti.value.filter(u => u.upit_id === upit_id);

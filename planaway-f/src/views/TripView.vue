@@ -39,7 +39,7 @@ const provjeraAgencije = async() => {
     if(!token || !putovanje.value || !agencija.value) {
         return false;
     }
-    const user_response = await axios.get('/api/users/ime', {
+    const user_response = await axios.get(import.meta.env.VITE_API_URL + '/api/users/ime', {
         headers: { Authorization : `Bearer ${token}` }
     });
     return user_response.data.user_type === 'agencija' && 
@@ -49,10 +49,10 @@ const provjeraAgencije = async() => {
 const dohvatiPutovanje = async() => {
     try {
         const putovanje_id = route.params.id;
-        const response = await axios.get(`/api/putovanja/${putovanje_id}`);
+        const response = await axios.get(import.meta.env.VITE_API_URL + `/api/putovanja/${putovanje_id}`);
         putovanje.value = response.data;
 
-        const agencija_response = await axios.get(`/api/agencije/${putovanje.value.agencija_id}`);
+        const agencija_response = await axios.get(import.meta.env.VITE_API_URL + `/api/agencije/${putovanje.value.agencija_id}`);
         agencija.value = agencija_response.data;
 
         jeAgencija.value = await provjeraAgencije();
@@ -84,7 +84,7 @@ const promjene = async() => {
     spremanje.value = true;
     try {
         const token = localStorage.getItem('token');
-        const response = await axios.put(`/api/putovanja/${putovanje.value.putovanje_id}`, 
+        const response = await axios.put(import.meta.env.VITE_API_URL + `/api/putovanja/${putovanje.value.putovanje_id}`, 
             forma.value,
             { headers: { Authorization: `Bearer ${token}`}}
         )
@@ -139,7 +139,7 @@ const posaljiUpit = async() => {
     slanjeUpita.value = true;
     upit.value = '';
     try {
-        await axios.post('/api/upiti', 
+        await axios.post(import.meta.env.VITE_API_URL + '/api/upiti', 
         {
             putovanje_id: putovanje.value.putovanje_id,
             broj_ljudi: brojOsoba.value
