@@ -119,7 +119,7 @@ const otkaziPromjene = () => {
     uređivanje.value = false;
 }
 const parseArray = (array) => {
-    if (Array.isArray(arr)) return array;
+    if (Array.isArray(array)) return array;
     if (!array) return [];
     if (typeof array === 'string') {
         return array.replace(/[{}]/g, '').split(',').map(s => s.trim().replace(/"/g, ''));
