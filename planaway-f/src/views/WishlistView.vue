@@ -3,6 +3,7 @@ import axios from 'axios';
 import { onMounted, ref } from 'vue';
 
 const wishlist = ref([]);
+const upiti = ref([]);
 
 const dohvatiWishlistu = async() => {
     try {
@@ -26,8 +27,29 @@ const ukloniIzWishliste = async(wishlist_id) => {
         console.error('Greška pri brisanju sa wishliste:', err)
     }
 }
+const dohvatiUpite = async() => {
+    try {
+        const token = localStorage.getItem('token');
+        const response = await axios.get('/api/upiti/moji-upiti', {
+            headers: { Authorization: `Bearer ${token}`}
+        })
+        upiti.value = response.data;
+    } catch(err) {
+        console.error('Greška pri dohvaćanju poslanih upita', err)
+    }
+}
+const statusUpita = (status) => {
+    const boje = {
+        'novi': 'bg-blue-100 text-blue-700',
+        'u procesu obrade': 'bg-yellow-100 text-yellow-700',
+        'prihvaćen': 'bg-green-100 text-green-700',
+        'odbijen': 'bg-red-100 text-red-700'
+    }
+    return boje[status?.toLowerCase()] || 'bg-gray-100 text-gray-700';
+}
 onMounted(() => {
     dohvatiWishlistu();
+    dohvatiUpite();
 })
 </script>
 <template>
@@ -69,11 +91,31 @@ onMounted(() => {
         </div>
         <div v-if="wishlist.length > 0" class="mx-6 mt-12">
             <h2 class="text-2xl font-semibold mb-6">Poslani upiti za putovanje:</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="bg-white rounded-xl shadow-sm p-6 text-center text-gray-500">
-                    <p>Nemas poslanih upita</p>
+            <div v-if="upiti.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div v-for="upit in upiti" :key="upit.upit_id" 
+                    class="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition">
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-lg font-semibold text-gray-800">{{ upit.destinacija }}</h3>
+                            <span class="text-xs font-medium px-3 py-1 rounded-full" :class="statusUpita(upit.status)">
+                                {{ upit.status }}
+                            </span>
+                        </div>
+                        <p class="text-gray-600 text-sm mb-2">{{ upit.naslov }}</p>
+                        <div class="border-t pt-3 mb-3">
+                            <p class="text-sm text-gray-600 mb-1">
+                                <span class="font-medium">Agencija:</span> {{ upit.naziv_agencije }}
+                            </p>
+                            <p class="text-sm text-gray-600">
+                                <span class="font-medium">Broj ljudi:</span> {{ upit.broj_ljudi }}
+                            </p>
+                        </div>  
+                        <div class="flex items-center justify-between pt-3 border-t">
+                            <span class="text-lg font-bold text-green-600">{{ upit.cijena }}€</span>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </div>  
         </div>
         <div v-if="wishlist.length > 0" class="text-right mx-6 mt-6">
             <RouterLink to="/trips" class="text-blue-600 hover:text-blue-700 font-medium hover:underline">
